@@ -3,7 +3,7 @@ export default class ClassRoom {
     this._maxStudentsSize = maxStudentsSize;
   }
 
-  get _maxStudentsSize() {
+  get maxStudentsSize() {
     return this._maxStudentsSize;
   }
 }
