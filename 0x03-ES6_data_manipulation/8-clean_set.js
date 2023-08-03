@@ -1,5 +1,5 @@
 export default function cleanSet(set, startString) {
-  if (startString.length === 0 || startString === undefined) {
+  if (startString === undefined || startString.length === 0) {
     return '';
   }
 
