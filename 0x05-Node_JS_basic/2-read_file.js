@@ -8,8 +8,7 @@ function countStudents(path) {
     const lines = data.split('\n');
 
     // Count no. of lines excluding headers
-    const count = lines.length - 2;
-    console.log(`Number of students: ${count}`);
+    let count = 0;
 
     // Initialize counters and lists for CS and SWE students
     let csCount = 0;
@@ -21,6 +20,7 @@ function countStudents(path) {
     for (let i = 1; i < lines.length; i += 1) {
       const line = lines[i].trim();
       if (line) {
+        count += 1;
         const [firstname, lastname, , field] = line.split(',');
         if (field === 'CS') {
           csCount += 1;
@@ -32,6 +32,7 @@ function countStudents(path) {
       }
     }
 
+    console.log(`Number of students: ${count}`);
     console.log(`Number of students in CS: ${csCount}. List: ${csStudents}`);
     console.log(`Number of students in CS: ${sweCount}. List: ${sweStudents}`);
   } catch (error) {
