@@ -8,7 +8,7 @@ function countStudents(path) {
     const lines = data.split('\n');
 
     // Count no. of lines excluding headers
-    const count = lines.length - 1;
+    const count = lines.length - 2;
     console.log(`Number of students: ${count}`);
 
     // Initialize counters and lists for CS and SWE students
