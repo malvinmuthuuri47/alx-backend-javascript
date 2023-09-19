@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const fs = require('fs');
 
 function countStudents(path) {
@@ -22,7 +21,7 @@ function countStudents(path) {
     for (let i = 1; i < lines.length; i += 1) {
       const line = lines[i].trim();
       if (line) {
-        const [firstname, lastname, age, field] = line.split(',');
+        const [firstname, lastname, , field] = line.split(',');
         if (field === 'CS') {
           csCount += 1;
           csStudents.push(`${firstname} ${lastname}`);
