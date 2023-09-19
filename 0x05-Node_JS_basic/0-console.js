@@ -1,6 +1,6 @@
 function displayMessage(...messages) {
   const message = messages.join(' ');
-  return message;
+  console.log(message);
 }
 
 module.exports = displayMessage;
