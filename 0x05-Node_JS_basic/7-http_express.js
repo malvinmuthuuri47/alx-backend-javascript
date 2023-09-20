@@ -62,7 +62,7 @@ app.get('/students', async (req, res) => {
         response += `Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}\n`;
       }
 
-      res.status(200).send(response);
+      res.status(200).send(response.trim());
     } catch (error) {
       res.status(500).send(error.message);
     }
