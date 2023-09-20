@@ -1,34 +1,50 @@
 const fs = require('fs');
+const { promisify } = require('util');
 
-function countStudents(path) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf-8', (error, data) => {
-      if (error) {
-        reject(new Error('Cannot load the database'));
-      } else {
-        const lines = data.split('\n').filter(Boolean);
-        const count = lines.length - 1;
+// Promisify the readFile Function
+const readFileAsync = promisify(fs.readFile);
 
-        const students = {
-          CS: [],
-          SWE: [],
-        };
+async function countStudents(path) {
+  try {
+    const data = await readFileAsync(path, 'utf-8');
 
-        lines.slice(1).forEach((line) => {
-          const [firstname, , , field] = line.split(',');
-          if (field === 'CS' || field === 'SWE') {
-            students[field].push(firstname);
-          }
-        });
+    // Split CSV data, filter out empty lines, and skip the header
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-        console.log(`Number of students: ${count}`);
-        console.log(`Number of students in CS: ${students.CS.length}. List: ${students.CS.join(', ')}`);
-        console.log(`Number of students in SWE: ${students.SWE.length}. List: ${students.SWE.join(', ')}`);
+    // Initialize counters for CS and SWE students
+    let csCount = 0;
+    let sweCount = 0;
+    const csList = [];
+    const sweList = [];
 
-        resolve(count);
+    lines.slice(1).forEach((line) => {
+      const [firstname, , , field] = line.split(',');
+      // Check if the field is CS or SWE and update respectively
+      if (field === 'CS') {
+        csCount += 1;
+        csList.push(firstname);
+      } else if (field === 'SWE') {
+        sweCount += 1;
+        sweList.push(firstname);
       }
     });
-  });
+
+    // Log the number of students and lists
+    console.log(`Number of students: ${lines.length - 1}`);
+    console.log(`Number of students in CS: ${csCount}. List: ${csList.join(', ')}`);
+    console.log(`Number of students in SWE: ${sweCount}. List: ${sweList.join(', ')}`);
+
+    // Return an object with the counts and lists
+    return {
+      count: lines.length - 1,
+      CSCount: csCount,
+      CSList: csList,
+      SWECount: sweCount,
+      SWEList: sweList,
+    };
+  } catch (error) {
+    throw new Error('Cannot load the database');
+  }
 }
 
-module.exports = countStudents;
+module.exports = { countStudents };
