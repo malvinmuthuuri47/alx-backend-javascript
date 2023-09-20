@@ -34,7 +34,7 @@ function countStudents(path) {
 
     console.log(`Number of students: ${count}`);
     console.log(`Number of students in CS: ${csCount}. List: ${csStudents}`);
-    console.log(`Number of students in CS: ${sweCount}. List: ${sweStudents}`);
+    console.log(`Number of students in SWE: ${sweCount}. List: ${sweStudents}`);
   } catch (error) {
     // Handle errors, including the case when the database is not available
     throw new Error('Cannot load the database');
