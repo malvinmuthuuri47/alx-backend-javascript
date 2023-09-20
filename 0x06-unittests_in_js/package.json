@@ -1,0 +1,17 @@
+{
+  "name": "0x06-unittests_in_js",
+  "version": "1.0.0",
+  "description": "<h2>0x06. Unittests in JS</h2>",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "assert": "^2.1.0",
+    "eslint": "^8.49.0",
+    "mocha": "^10.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC"
+}
