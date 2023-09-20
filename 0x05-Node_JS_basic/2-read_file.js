@@ -21,20 +21,20 @@ function countStudents(path) {
       const line = lines[i].trim();
       if (line) {
         count += 1;
-        const [firstname, lastname, , field] = line.split(',');
+        const [firstname, , , field] = line.split(',');
         if (field === 'CS') {
           csCount += 1;
-          csStudents.push(`${firstname} ${lastname}`);
+          csStudents.push(`${firstname}`);
         } else if (field === 'SWE') {
           sweCount += 1;
-          sweStudents.push(`${firstname} ${lastname}`);
+          sweStudents.push(`${firstname}`);
         }
       }
     }
 
     console.log(`Number of students: ${count}`);
-    console.log(`Number of students in CS: ${csCount}. List: ${csStudents}`);
-    console.log(`Number of students in SWE: ${sweCount}. List: ${sweStudents}`);
+    console.log(`Number of students in CS: ${csCount}. List: ${csStudents.join(', ')}`);
+    console.log(`Number of students in SWE: ${sweCount}. List: ${sweStudents.join(', ')}`);
   } catch (error) {
     // Handle errors, including the case when the database is not available
     throw new Error('Cannot load the database');
