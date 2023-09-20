@@ -1,5 +1,5 @@
-const http = require('http');
 const fs = require('fs');
+const http = require('http');
 
 function countStudents(path) {
   return new Promise((resolve, reject) => {
@@ -21,40 +21,54 @@ function countStudents(path) {
             students[field].push(firstname);
           }
         });
-
-        console.log(`Number of students: ${count}`);
-        console.log(`Number of students in CS: ${students.CS.length}. List: ${students.CS.join(', ')}`);
-        console.log(`Number of students in SWE: ${students.SWE.length}. List: ${students.SWE.join(', ')}`);
-
-        resolve({ count, ...students });
+        resolve(
+          {
+            count, students,
+          },
+        );
       }
     });
   });
 }
 
-const port = 1245;
-
 const app = http.createServer((req, res) => {
   if (req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello Holberton School!\n');
+    res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    const databasePath = 'database.csv'; // Change this to your database file path
+    const databasePath = process.argv[2];
 
-    countStudents(databasePath)
-      .then((countStudentsData) => {
-        const response = `This is the list of our students\nNumber of students: ${countStudentsData.count}\nNumber of students in CS: ${countStudentsData.CSCount}. List: ${countStudentsData.CSList.join(', ')}\nNumber of students in SWE: ${countStudentsData.SWECount}. List: ${countStudentsData.SWEList.join(', ')}`;
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end(response);
-      })
-      .catch((error) => {
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end(error.message);
-      });
+    if (!databasePath) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end('Cannot load the database\n');
+    } else {
+      countStudents(databasePath)
+        .then((result) => {
+          const { count, students } = result;
+
+          res.writeHead(200, { 'Content-Type': 'text/plain' });
+          res.write('This is the list of our students\n');
+          res.write(`Number of students: ${count}\n`);
+
+          for (const field of ['CS', 'SWE']) {
+            res.write(`Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}\n`);
+          }
+          res.end();
+        })
+        .catch((error) => {
+          res.writeHead(500, { 'Content-Type': 'text/plain' });
+          res.end(`${error.message}\n`);
+        });
+    }
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('Not Found\n');
   }
-}).listen(port);
+});
+
+const port = 1245;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 module.exports = app;
