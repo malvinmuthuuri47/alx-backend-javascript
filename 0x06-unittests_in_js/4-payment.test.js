@@ -1,41 +1,34 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const sendPaymentRequestToAPI = require('./4-payment'); // Use 4-payment.js
-const Utils = require('./utils');
+const sendPaymentequestToAPI = require('./4-payment');
+const utils = require('./utils');
+const sendPaymentRequestToAPI = require('./4-payment');
 
 describe('sendPaymentRequestToAPI', () => {
-  let calculateNumberStub; // Declare the stub variable
-  let consoleLogSpy; // Declare the spy variable
+    let calculateNumberStub;
 
-  // Set up the stub and spy before the tests
-  beforeEach(() => {
-    calculateNumberStub = sinon.stub(Utils, 'calculateNumber').returns(10);
-    consoleLogSpy = sinon.spy(console, 'log');
-  });
+    beforeEach(() => {
+        calculateNumberStub = sinon.stub(utils, 'calculateNumber').returns(10);
+    });
 
-  // Clean up after the tests
-  afterEach(() => {
-    calculateNumberStub.restore();
-    consoleLogSpy.restore();
-  });
+    afterEach(() => {
+        calculateNumberStub.restore();
+    });
 
-  it('should call Utils.calculateNumber with type SUM, a = 100, b = 20', () => {
-    const totalAmount = 100;
-    const totalShipping = 20;
+    it('should call utils.calculateNumber with correct arguments', () => {
+        const totalAmount = 100;
+        const totalShipping = 20;
+        sendPaymentRequestToAPI(totalAmount, totalShipping);
+        expect(calculateNumberStub.calledWith('SUM', totalAmount, totalShipping)).to.be.true;
+    });
 
-    sendPaymentRequestToAPI(totalAmount, totalShipping);
+    it('should log the correct message to the console', () => {
+        const totalAmount = 100;
+        const totalShipping = 20;
+        const consoleLogSpy = sinon.spy(console, 'log');
+        sendPaymentRequestToAPI(totalAmount, totalShipping);
+        expect(consoleLogSpy.calledWith('The total is: 10')).to.be.true;
 
-    // Verify that calculateNumberStub is called with the correct arguments
-    expect(calculateNumberStub.calledWith('SUM', totalAmount, totalShipping)).to.be.true;
-  });
-
-  it('should log the correct message to the console', () => {
-    const totalAmount = 100;
-    const totalShipping = 20;
-
-    sendPaymentRequestToAPI(totalAmount, totalShipping);
-
-    // Verify that console.log is called with the correct message
-    expect(consoleLogSpy.calledWith('The total is: 10')).to.be.true;
-  });
+        consoleLogSpy.restore();
+    });
 });
